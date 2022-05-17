@@ -20,9 +20,4 @@ console.log(raiz(4));
 
 /*---*/
 
-console.log(Anto.dni);
-
-
-/*---*/
-
 cambiarArchivo("polshuCapo.txt", "Hola Polshu esta es nuestra primer pagina uev")
