@@ -1,0 +1,27 @@
+{
+  "name": "disney",
+  "version": "1.0.0",
+  "description": "tp final node js",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/server.js"
+  },
+  "keywords": [
+    "polshu",
+    "polshetta",
+    "dai",
+    "node",
+    "app"
+  ],
+  "author": "dali y anto",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mssql": "^8.1.2",
+    "nodemon": "^2.0.18"
+  }
+}
