@@ -7,7 +7,7 @@ class PeliculaService {
         let rta = null;
         try {
             let pool = await sql.connect(config);
-        
+
             let result = await pool.request().query("SELECT * FROM Peliculas");
             rta = result.recordsets[0];
         }

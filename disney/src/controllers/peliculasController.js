@@ -4,14 +4,16 @@ import PeliculaService from '../services/peliculasServices.js';
 
 const peliculaRouter = Router();
 
+
 const peliculaService = new PeliculaService();
 
 peliculaRouter.get('', async (req, res) => {
     try {
-        const peliculas = await PeliculaService.getAll();
+        const peliculas = await peliculaService.getAll();
         return res.status(200).send(peliculas);
     }
     catch (error) {
+        console.log(error);
         res.status(500).send("Hubo un error")
     }
 });
@@ -20,7 +22,7 @@ peliculaRouter.get('/:id', async (req, res) => {
     try {
 
         const { id } = req.params
-        const peliculas = await PeliculasService.getById(id);
+        const peliculas = await peliculaService.getById(id);
         if(peliculas==null){
             return res.sendStatus(404);
         }
@@ -36,7 +38,7 @@ peliculaRouter.get('/:id', async (req, res) => {
 peliculaRouter.post('/create', async (req, res) => {
     try {
         const peliculas = req.body;
-        const peliculaCreada = await PeliculasService.createPelicula(peliculas);
+        const peliculaCreada = await peliculaService.createPelicula(peliculas);
         return res.status(200).send(peliculas);
     }
     catch (error) {
@@ -49,7 +51,7 @@ peliculaRouter.put('/update/:id', async (req, res) => {
         const { nombre, libreGluten, importe, descripcion } = req.body
         const { id } = req.params
         const nuevaPelicula = new Pelicula(nombre, libreGluten, importe, descripcion)
-        const peliculaActualizado = await PeliculaService.updatePelicula(id, nuevaPelicula);
+        const peliculaActualizado = await peliculaService.updatePelicula(id, nuevaPelicula);
         return res.status(200).send(nuevaPelicula);
     }
 
@@ -63,7 +65,7 @@ peliculaRouter.put('/update/:id', async (req, res) => {
 peliculaRouter.delete('/delete/:id', async (req, res) => {
     try {
         const { id } = req.params
-        const peliculaBorrada = await PeliculaService.deleteById(id);
+        const peliculaBorrada = await peliculaService.deleteById(id);
         return res.status(200).send(peliculaBorrado);
     }
     catch (error) {

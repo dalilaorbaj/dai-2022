@@ -4,11 +4,11 @@ import PersonajesServices from '../services/PersonajesServices.js';
 
 const personajeRouter = Router();
 
-const personajeService = new PersonajeService();
+const personajeService = new PersonajesServices();
 
 personajeRouter.get('', async (req, res) => {
     try {
-        const personajes = await PersonajeService.getAll();
+        const personajes = await personajeService.getAll();
         return res.status(200).send(personajes);
     }
     catch (error) {
@@ -20,7 +20,7 @@ personajeRouter.get('/:id', async (req, res) => {
     try {
 
         const { id } = req.params
-        const personajes = await PersonajeService.getById(id);
+        const personajes = await personajeService.getById(id);
         if(personajes==null){
             return res.sendStatus(404);
         }
@@ -36,7 +36,7 @@ personajeRouter.get('/:id', async (req, res) => {
 personajeRouter.post('/create', async (req, res) => {
     try {
         const nuevoPersonaje = req.body;
-        const personajeCreado = await PersonajeService.createPersonaje(nuevoPersonaje);
+        const personajeCreado = await personajeService.createPersonaje(nuevoPersonaje);
         return res.status(200).send(nuevoPersonaje);
     }
     catch (error) {
@@ -49,7 +49,7 @@ personajeRouter.put('/update/:id', async (req, res) => {
         const { nombre, libreGluten, importe, descripcion } = req.body
         const { id } = req.params
         const nuevoPersonaje = new Personaje(nombre, libreGluten, importe, descripcion)
-        const personajeActualizado = await PersonajeService.updatePersonaje(id, nuevoPersonaje);
+        const personajeActualizado = await personajeService.updatePersonaje(id, nuevoPersonaje);
         return res.status(200).send(nuevoPersonaje);
     }
 
@@ -63,7 +63,7 @@ personajeRouter.put('/update/:id', async (req, res) => {
 personajeRouter.delete('/delete/:id', async (req, res) => {
     try {
         const { id } = req.params
-        const personajeBorrado = await PersonajeService.deleteById(id);
+        const personajeBorrado = await personajeService.deleteById(id);
         return res.status(200).send(personajeBorrado);
     }
     catch (error) {
