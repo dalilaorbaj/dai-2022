@@ -27,6 +27,5 @@ app.use("/auth/login", usuariosController);
 
 
 app.get('/prueba', function (req, res) {
-    console.log("prueba")
     res.send('hola!!!!!!!!!');
 });

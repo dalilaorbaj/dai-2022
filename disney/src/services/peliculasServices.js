@@ -4,47 +4,45 @@ import pelicula from '../models/Pelicula.js';
 
 class PeliculaService {
     getAll = async () => {
-        let rta = null;
+        let peliculas = null;
         try {
             let pool = await sql.connect(config);
 
             let result = await pool.request().query("SELECT * FROM Peliculas");
-            rta = result.recordsets[0];
+            peliculas = result.recordsets[0][0];
         }
         catch (error) {
             throw error
+            console.log(error)
         }
-        return rta;
+        return peliculas;
     }
 
     getById = async (id) => {
-        let rta = null;
+        let pelicula = null;
         try {
             let pool = await sql.connect(config);
-            let result = await pool.request().input('pId', sql.Int, id).query("SELECT * FROM Peliculas WHERE Id = @pId");
-            rta = result.recordsets[0][0];
+            let result = await pool.request().input('pId', sql.Int, id)
+            .query("SELECT * FROM Peliculas WHERE Id = @pId");
+            pelicula = result.recordsets[0];
         }
         catch (error) {
             throw error
         }
-        return rta;
+        return pelicula;
     }
 
     createPelicula = async (pelicula) => {
         let filasAfectadas = 0;
         try {
             let pool = await sql.connect(config);
-            console.log(pelicula);
             let result = await pool.request()
-            
             .input("imagen", sql.VarChar, pelicula.imagen)
             .input("titulo", sql.VarChar, pelicula.titulo)
             .input("fechaCreacion", sql.Date, pelicula.fechaCreacion)
             .input("calificacion", sql.Int, pelicula.calificacion)
-                .query("INSERT INTO Peliculas (imagen, titulo, fechaCreacion, calificacion) VALUES (@imagen, @titulo, @fechaCreacion, @calificacion)");
-                
-                filasAfectadas = result.rowsAffected;
-
+            .query("INSERT INTO Peliculas (imagen, titulo, fechaCreacion, calificacion) VALUES (@imagen, @titulo, @fechaCreacion, @calificacion)");
+            filasAfectadas = result.rowsAffected;
         }
         catch (error) {
             throw error
@@ -52,9 +50,9 @@ class PeliculaService {
         return filasAfectadas>0;
     }
 
+
     updatePelicula = async (id, pelicula) => {
         let filasAfectadas = 0;
-
         try {
             let pool = await sql.connect(config);
             let result = await pool.request()
