@@ -4,61 +4,53 @@ import Usuario from '../models/Usuario.js'
 import jwt from "jsonwebtoken"
 
 
+
 class UsuarioService {
-
-
-    
-    buscarUsuario = async (userName, password) =>{
+    buscarUsuario = async (userName, password) => {
         let usuario = null;
-        try{
+        try {
             let pool = await sql.connect(config);
             const result = await pool.request()
-                                    .input ('pUserName', sql.VarChar, userName)
-                                    .input ('pPassword', sql.VarChar, password)
-                                    .query('SELECT * FROM Usuarios WHERE UserName = @puserName AND Password=@ppassword');
-                                    usuario = result.recordsets[0][0];   
+                .input('pUserName', sql.VarChar, userName)
+                .input('pPassword', sql.VarChar, password)
+                .query('SELECT * FROM Usuarios WHERE UserName = @pUserName AND Password=@pPassword');
+            usuario = result.recordsets[0][0];
             /*if(usuario.length == 0) return usuario = null;*/
             return usuario;
 
-        } catch(error){
+        } catch (error) {
             console.log(error);
             return error
         }
     }
 
-    generateToken = async (usuario) =>{
+    generateToken = async (usuario) => {
 
-        try{
-            const token = await jwt.sign({user: usuario},'secretkey',  {expiresIn: '300s'},(err, token)=>{
-                return token;
-                }
-            )
+        try {
+            const userToken = jwt.sign({ user: usuario }, 'shhhhh', { expiresIn: '300s' });
+            console.log(userToken)
 
             function addMinutes(date, minutes) {
-                return new Date(date.getTime() + minutes*60000);
+                return new Date(date.getTime() + minutes * 60000);
             }
-              
+
             const tokenExpirationDate = addMinutes(new Date, 5).toLocaleString();
 
             let pool = await sql.connect(config);
             const result = await pool.request()
-            .input("puserName", sql.VarChar, usuario.userName)
-            .input("ppassword", sql.VarChar, usuario.password)
-            .input("token", sql.VarChar, token)
-            .input("tokenExpirationDate", sql.VarChar, tokenExpirationDate)
-            .query("UPDATE Usuarios SET token = @token, tokenExpirationDate = @tokenExpirationDate WHERE UserName = @puserName AND Password=@ppassword"); 
-            return token;
+                .input("userName", sql.VarChar, usuario.userName)
+                .input("password", sql.VarChar, usuario.password)
+                .input("token", sql.VarChar, userToken)
+                .input("tokenExpirationDate", sql.VarChar, tokenExpirationDate)
+                .query("UPDATE Usuarios SET Token = @token, TokenExpirationDate = @tokenExpirationDate WHERE UserName = @userName AND Password=@password");
+                return userToken;
 
-        } catch(error){
+        } catch (error) {
             console.log(error);
             return error
         }
-       
+
     }
-
-
-    /*
-
     GetByUserNamePassword = async (userName, password) => {
 
         try {
@@ -96,18 +88,17 @@ class UsuarioService {
 
 
     GetByToken = async (token) => {
-
         try {
-            const miUsuario = new Usuario()
-            miUsuario = null;
             let pool = await sql.connect(config);
-            let result = await pool.request().input('ptoken', sql.VarChar, token).query("SELECT * FROM Usuarios u WHERE u.Token=@token");
-            miUsuario = result.recordsets[0][0];
+            let result = await pool.request()
+            .input('ptoken', sql.VarChar, token)
+            .query("SELECT * FROM Usuarios u WHERE u.Token=@ptoken");
+            let miUsuario = result.recordsets[0][0];
+            return miUsuario;
         }
         catch (error) {
             throw error
         }
-        return miUsuario;
     }
 
 
@@ -128,6 +119,6 @@ class UsuarioService {
         }
         
     }
-*/
+
 }
 export default UsuarioService;

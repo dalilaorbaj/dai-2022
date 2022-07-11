@@ -14,7 +14,9 @@ usuarioRouter.post('', async (req, res) => {
             return res.status(404).send('Datos incorrectossss');
         }
         else{
+            
             const token = await usuarioService.generateToken(req.body);
+            console.log(token)
             res.send(token)
         }
     }

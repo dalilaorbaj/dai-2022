@@ -1,15 +1,19 @@
 import config from '../../dbconfig.js';
 import sql from 'mssql';
 import personaje from '../models/Personaje.js';
+import * as SecurityHelper from '../helpers/securityHelper.js'
 
 class PersonajeService {
-    getAll = async () => {
+    getAll = async (token) => {
         let rta = null;
         try {
+            let tokenValido = SecurityHelper.IsValidToken(token);
+            console.log(tokenValido)
+            if(tokenValido){
             let pool = await sql.connect(config);
-        
             let result = await pool.request().query("SELECT * FROM Personajes");
             rta = result.recordsets[0];
+            }
         }
         catch (error) {
             throw error

@@ -8,7 +8,7 @@ const personajeService = new PersonajesServices();
 
 personajeRouter.get('', async (req, res) => {
     try {
-        const personajes = await personajeService.getAll();
+        const personajes = await personajeService.getAll(req.params.token);
         return res.status(200).send(personajes);
     }
     catch (error) {
