@@ -13,7 +13,6 @@ peliculaRouter.get('', async (req, res) => {
         return res.status(200).json(peliculas);
     }
     catch (error) {
-        console.log(error)
         res.status(500).send('error en el server')
     }
 });

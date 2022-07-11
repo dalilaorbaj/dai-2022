@@ -9,7 +9,7 @@ class PeliculaService {
             let pool = await sql.connect(config);
 
             let result = await pool.request().query("SELECT * FROM Peliculas");
-            peliculas = result.recordsets[0][0];
+            peliculas = result.recordsets[0];
         }
         catch (error) {
             throw error
@@ -24,7 +24,7 @@ class PeliculaService {
             let pool = await sql.connect(config);
             let result = await pool.request().input('pId', sql.Int, id)
             .query("SELECT * FROM Peliculas WHERE Id = @pId");
-            pelicula = result.recordsets[0];
+            pelicula = result.recordsets[0][0];
         }
         catch (error) {
             throw error

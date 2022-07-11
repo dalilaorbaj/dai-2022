@@ -1,14 +1,14 @@
 import config from '../../dbconfig.js';
 import sql from 'mssql';
-import pelicula from '../models/Pelicula.js';
+import personaje from '../models/Personaje.js';
 
-class PeliculaService {
+class PersonajeService {
     getAll = async () => {
         let rta = null;
         try {
             let pool = await sql.connect(config);
         
-            let result = await pool.request().query("SELECT * FROM Peliculas");
+            let result = await pool.request().query("SELECT * FROM Personajes");
             rta = result.recordsets[0];
         }
         catch (error) {
@@ -21,7 +21,7 @@ class PeliculaService {
         let rta = null;
         try {
             let pool = await sql.connect(config);
-            let result = await pool.request().input('pId', sql.Int, id).query("SELECT * FROM Peliculas WHERE Id = @pId");
+            let result = await pool.request().input('pId', sql.Int, id).query("SELECT * FROM Personajes WHERE Id = @pId");
             rta = result.recordsets[0][0];
         }
         catch (error) {
@@ -30,18 +30,21 @@ class PeliculaService {
         return rta;
     }
 
-    createPelicula = async (pelicula) => {
+    createPersonaje = async (personaje) => {
         let filasAfectadas = 0;
         try {
             let pool = await sql.connect(config);
-            console.log(pelicula);
+            console.log(personaje);
             let result = await pool.request()
             
-            .input("imagen", sql.VarChar, pelicula.imagen)
-            .input("titulo", sql.VarChar, pelicula.titulo)
-            .input("fechaCreacion", sql.Date, pelicula.fechaCreacion)
-            .input("calificacion", sql.Int, pelicula.calificacion)
-                .query("INSERT INTO Peliculas (imagen, titulo, fechaCreacion, calificacion) VALUES (@imagen, @titulo, @fechaCreacion, @calificacion)");
+            .input("imagen", sql.VarChar, personaje.imagen)
+            .input("nombre", sql.VarChar, personaje.nombre)
+            .input("edad", sql.Date, personaje.edad)
+            .input("peso", sql.Int, personaje.peso)
+            .input("historia", sql.VarChar, personaje.historia)
+            .input("pelis", sql.Int, personaje.pelis)
+
+                .query("INSERT INTO Personajes (imagen, nombre, edad, peso, historia, pelis) VALUES (@imagen, @nombre, @edad, @peso, @historia, @pelis)");
                 
                 filasAfectadas = result.rowsAffected;
 
@@ -52,18 +55,19 @@ class PeliculaService {
         return filasAfectadas>0;
     }
 
-    updatePelicula = async (id, pelicula) => {
+    updatePersonaje = async (id, personaje) => {
         let filasAfectadas = 0;
 
         try {
             let pool = await sql.connect(config);
             let result = await pool.request()
-                .input('pId', sql.Int, id)
-                .input("imagen", sql.VarChar, pelicula.imagen)
-                .input("titulo", sql.VarChar, pelicula.titulo)
-                .input("fechaCreacion", sql.Date, pelicula.fechaCreacion)
-                .input("calificacion", sql.Int, pelicula.calificacion)
-                .query("UPDATE Peliculas SET imagen = @imagen, titulo = @titulo, fechaCreacion = @fechaCreacion, calificacion = @calificacion WHERE Id = @pId"); 
+            .input("imagen", sql.VarChar, personaje.imagen)
+            .input("nombre", sql.VarChar, personaje.nombre)
+            .input("edad", sql.Date, personaje.edad)
+            .input("peso", sql.Int, personaje.peso)
+            .input("historia", sql.VarChar, personaje.historia)
+            .input("pelis", sql.Int, personaje.pelis)
+                .query("UPDATE Personajes SET imagen = @imagen, nombre = @nombre, edad = @edad, peso = @peso, historia=@historia, pelis=@pelis WHERE Id = @pId"); 
                 filasAfectadas = result.rowsAffected;
         }
         catch (error) {
@@ -77,7 +81,7 @@ class PeliculaService {
         try {
             let pool = await sql.connect(config);
             let result = await pool.request()
-            .input('pId', sql.Int, id).query("DELETE FROM Peliculas WHERE Id=@pId");
+            .input('pId', sql.Int, id).query("DELETE FROM Personajes WHERE Id=@pId");
             filasAfectadas = result.rowsAffected;
         }
         catch (error) {
@@ -87,4 +91,4 @@ class PeliculaService {
     }
 }
 
-export default PeliculaService;
+export default PersonajeService;
