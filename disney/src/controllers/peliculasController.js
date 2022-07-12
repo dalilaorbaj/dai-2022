@@ -1,4 +1,5 @@
 import { Router } from "express";
+import rutasProtegidas from "../middleware/tokenVerify.js";
 import Pelicula from '../models/Pelicula.js';
 import PeliculaService from '../services/peliculasServices.js';
 
@@ -34,7 +35,7 @@ peliculaRouter.get('/:id', async (req, res) => {
 });
 
 
-peliculaRouter.post('/create', async (req, res) => {
+peliculaRouter.post('/create', rutasProtegidas, async (req, res) => {
     try {
         const pelicula = req.body;
         const peliculaCreada = await peliculaService.createPelicula(pelicula);

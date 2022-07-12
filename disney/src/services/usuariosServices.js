@@ -91,9 +91,9 @@ class UsuarioService {
         try {
             let pool = await sql.connect(config);
             let result = await pool.request()
-            .input('ptoken', sql.VarChar, token)
-            .query("SELECT * FROM Usuarios u WHERE u.Token=@ptoken");
-            let miUsuario = result.recordsets[0][0];
+            .input('token', sql.VarChar, token)
+            .query("SELECT * FROM Usuarios WHERE Token=@token");
+            let miUsuario = result.recordsets[0];
             return miUsuario;
         }
         catch (error) {

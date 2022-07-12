@@ -6,7 +6,7 @@ class Personaje{
         this.edad = edad;
         this.peso = peso;
         this.historia = historia;
-        this.pelis = pelis;
+        /*this.pelis = pelis;*/
     }
 }
 export default Personaje;

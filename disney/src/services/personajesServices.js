@@ -4,16 +4,14 @@ import personaje from '../models/Personaje.js';
 import * as SecurityHelper from '../helpers/securityHelper.js'
 
 class PersonajeService {
-    getAll = async (token) => {
+    getAll = async () => {
         let rta = null;
         try {
-            let tokenValido = SecurityHelper.IsValidToken(token);
-            console.log(tokenValido)
-            if(tokenValido){
-            let pool = await sql.connect(config);
-            let result = await pool.request().query("SELECT * FROM Personajes");
-            rta = result.recordsets[0];
-            }
+           
+                let pool = await sql.connect(config);
+                let result = await pool.request().query("SELECT * FROM Personajes");
+                rta = result.recordsets[0];
+            
         }
         catch (error) {
             throw error
@@ -43,20 +41,19 @@ class PersonajeService {
             
             .input("imagen", sql.VarChar, personaje.imagen)
             .input("nombre", sql.VarChar, personaje.nombre)
-            .input("edad", sql.Date, personaje.edad)
+            .input("edad", sql.Int, personaje.edad)
             .input("peso", sql.Int, personaje.peso)
             .input("historia", sql.VarChar, personaje.historia)
-            .input("pelis", sql.Int, personaje.pelis)
-
-                .query("INSERT INTO Personajes (imagen, nombre, edad, peso, historia, pelis) VALUES (@imagen, @nombre, @edad, @peso, @historia, @pelis)");
+            /*.input("pelis", sql.Int, personaje.pelis)*/
+            .query("INSERT INTO Personajes (imagen, nombre, edad, peso, historia) VALUES (@imagen, @nombre, @edad, @peso, @historia)");
                 
                 filasAfectadas = result.rowsAffected;
+                return filasAfectadas>0;
 
         }
         catch (error) {
             throw error
         }
-        return filasAfectadas>0;
     }
 
     updatePersonaje = async (id, personaje) => {
@@ -67,11 +64,11 @@ class PersonajeService {
             let result = await pool.request()
             .input("imagen", sql.VarChar, personaje.imagen)
             .input("nombre", sql.VarChar, personaje.nombre)
-            .input("edad", sql.Date, personaje.edad)
+            .input("edad", sql.Int, personaje.edad)
             .input("peso", sql.Int, personaje.peso)
             .input("historia", sql.VarChar, personaje.historia)
-            .input("pelis", sql.Int, personaje.pelis)
-                .query("UPDATE Personajes SET imagen = @imagen, nombre = @nombre, edad = @edad, peso = @peso, historia=@historia, pelis=@pelis WHERE Id = @pId"); 
+            /*.input("pelis", sql.Int, personaje.pelis)*/
+                .query("UPDATE Personajes SET imagen = @imagen, nombre = @nombre, edad = @edad, peso = @peso, historia=@historia WHERE Id = @pId"); 
                 filasAfectadas = result.rowsAffected;
         }
         catch (error) {
